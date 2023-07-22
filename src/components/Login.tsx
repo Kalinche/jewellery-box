@@ -1,5 +1,6 @@
 // Login.tsx
 import React, { useState } from "react";
+import "./styles/Form.css";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -24,27 +25,27 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <label>
-        Username:
+    <div className="form-container">
+      <form onSubmit={handleLogin}>
+        <label htmlFor="loginUsername">Username:</label>
         <input
           type="text"
+          id="loginUsername"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-      </label>
-      <label>
-        Password:
+        <label htmlFor="loginPassword">Password:</label>
         <input
           type="password"
+          id="loginPassword"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-      </label>
-      <input type="submit" value="Login" />
-    </form>
+        <input type="submit" value="Login" />
+      </form>
+    </div>
   );
 };
 

@@ -1,10 +1,11 @@
 // Register.tsx
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import "./styles/Form.css";
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,52 +14,51 @@ const Register = () => {
       return;
     }
     try {
-      const response = await fetch('/register', {
-        method: 'POST', 
+      const response = await fetch("/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }) 
+        body: JSON.stringify({ username, password }),
       });
       const data = await response.json();
       console.log(data);
       // TODO: Handle response appropriately.
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
   return (
-    <form onSubmit={handleRegister}>
-      <label>
-        Username:
+    <div className="form-container">
+      <form onSubmit={handleRegister}>
+        <label htmlFor="username">Username:</label>
         <input
           type="text"
+          id="username"
           value={username}
-          onChange={e => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
-      </label>
-      <label>
-        Password:
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
+          id="password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
-      </label>
-      <label>
-        Confirm Password:
+        <label htmlFor="confirmPassword">Confirm Password:</label>
         <input
           type="password"
+          id="confirmPassword"
           value={confirmPassword}
-          onChange={e => setConfirmPassword(e.target.value)}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-      </label>
-      <input type="submit" value="Register" />
-    </form>
+        <input type="submit" value="Register" />
+      </form>
+    </div>
   );
 };
 
