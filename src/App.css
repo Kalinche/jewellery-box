@@ -1,0 +1,23 @@
+ul {
+    margin: 2rem;
+    padding: 10px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.link {
+    text-decoration: none;
+    color: #333;
+}
