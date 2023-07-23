@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import "./styles/Form.css";
 import { useNavigate } from 'react-router-dom';
-import { IUser } from "../model/user.model";
+import { User } from "../model/user.model";
 
 const Register = () => {
-  const [user, setUser] = useState<IUser>(new IUser("", ""));
+  const [user, setUser] = useState<User>(new User("", ""));
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
