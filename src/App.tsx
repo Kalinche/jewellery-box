@@ -3,8 +3,8 @@ import './App.css'
 import Home from "./pages/Home";
 import ErrorPage from "./pages/Error";
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
-import Register from "./components/Register";
-import Login from "./components/Login";
+import Register from "./components/RegisterForm";
+import Login from "./components/LoginForm";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

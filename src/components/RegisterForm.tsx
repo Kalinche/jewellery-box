@@ -1,15 +1,23 @@
 // Register.tsx
 import React, { useState } from "react";
 import "./styles/Form.css";
+import { useNavigate } from 'react-router-dom';
+import { IUser } from "../model/user.model";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [user, setUser] = useState<IUser>(new IUser("", ""));
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setUser({ ...user, [name]: value });
+  };
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    if (user.password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
@@ -19,7 +27,7 @@ const Register = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ "username": "name" , "password" : "password"}),
       });
       const data = await response.json();
       console.log(data);
@@ -27,6 +35,8 @@ const Register = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+
+    navigate('/');
   };
 
   return (
@@ -36,16 +46,16 @@ const Register = () => {
         <input
           type="text"
           id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={user.username}
+          onChange={handleChange}
           required
         />
         <label htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={user.password}
+          onChange={handleChange}
           required
         />
         <label htmlFor="confirmPassword">Confirm Password:</label>
