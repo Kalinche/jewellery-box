@@ -9,7 +9,7 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("/login", {
+      const response = await fetch("http://localhost:2704/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

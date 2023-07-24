@@ -1,4 +1,3 @@
-// Register.tsx
 import React, { useState } from "react";
 import "./styles/Form.css";
 import { useNavigate } from 'react-router-dom';
@@ -22,16 +21,15 @@ const Register = () => {
       return;
     }
     try {
-      const response = await fetch("/register", {
+      const response = await fetch("http://localhost:2704/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ "username": "name" , "password" : "password"}),
+        body: JSON.stringify({ username: user.username , password : user.password}),
       });
       const data = await response.json();
       console.log(data);
-      // TODO: Handle response appropriately.
     } catch (error) {
       console.error("Error:", error);
     }
@@ -46,6 +44,7 @@ const Register = () => {
         <input
           type="text"
           id="username"
+          name="username"
           value={user.username}
           onChange={handleChange}
           required
@@ -54,6 +53,7 @@ const Register = () => {
         <input
           type="password"
           id="password"
+          name="password"
           value={user.password}
           onChange={handleChange}
           required
