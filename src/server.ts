@@ -1,52 +1,88 @@
 import express from 'express';
-import { MongoClient } from 'mongodb';
-import { UserRepository } from './dao/user-repository';
-import authenticationRouter from './routes/auth-router';
-import userRouter from './routes/users-router';
+import { ObjectId } from 'mongodb';
+import { userRepository } from './dao/user-repository';
+import { User, validateUser } from './model/user.model';
 
-const app = express()
+const app = express();
 
-const port = 2704
-const DB_URL = 'mongodb://localhost:27017/'; // your MongoDB URL here
-const DB_NAME = 'myDbName'; // your database name here
+const port = 2704;
 
-let connection: MongoClient;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// Additional middleware which will set headers that we need on each request.
+app.use(function (req, res, next) {
+  // Set permissive CORS header - this allows this server to be used only as
+  // an API server in conjunction with something like webpack-dev-server.
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader(`Access-Control-Allow-Methods`, `GET, POST, PUT, DELETE, OPTIONS`);
+  res.setHeader('Access-Control-Max-Age', 3600); // 1 hour
+  // Disable caching so we'll always get the latest posts.
+  res.setHeader('Cache-Control', 'no-cache');
+  next();
+});
 
-async function start() {
-  const db = await initDb(DB_URL, DB_NAME);
-  const userRepo = new UserRepository(db, 'users'); // assuming UserRepository takes db and collection name
+// User routes
+app.route("/users").get(async (req, res) => {
+  const username = req.query.username;
+  if (username) {
+    const user = await userRepository.getUserByUsername(username as string);
+    console.log("Getting user by username: ");
+    console.log(user);
+    res.json(user);
+  } else {
+    const users = await userRepository.getAllUsers();
+    res.json(users);
+  }
+}).post(async (req, res) => {
+  const user = req.body as User;
+  const problems = validateUser(user);
+  if (problems.length === 0) {
+    const newId = await userRepository.addUser(user);
+    res.status(201);
+    res.json(newId);
+  } else {
+    res.status(400);
+    res.json(problems);
+  }
+});
 
-  app.locals.userRepo = userRepo;
+app.route("/users/:userId").get(async (req, res) => {
+  const user = await userRepository.getUser(new ObjectId(req.params.userId));
+  if (user) {
+    console.log("Getting user by _id: ");
+    console.log(user);
+    res.json(user);
+  } else {
+    res.sendStatus(404);
+  }
+}).put(async (req, res) => {
+  console.log("Updating user: ");
+  const problems = validateUser(req.body);
+  if (problems.length === 0) {
+    const id = req.body._id;
+    // The id converts to string when send/receiving requests, so we want to convert it back to ObjectId
+    const result = await userRepository.updateUser({ ...req.body, _id: new ObjectId(id) });
+    if (result.modifiedCount === 0) {
+      res.status(404);
+    }
+    res.json(result);
+  } else {
+    res.status(400);
+    res.json(problems);
+  }
+}).delete(async (req, res) => {
+  const result = await userRepository.deleteUser(new ObjectId(req.params.userId));
+  if (result.deletedCount === 0) {
+    res.status(404);
+  }
+  res.json(result);
+});
 
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  // Additional middleware which will set headers that we need on each request.
-  app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie, Host, Origin');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
-    res.setHeader('Access-Control-Max-Age', 3600); // 1 hour
-    // Disable caching so we'll always get the latest posts.
-    res.setHeader('Cache-Control', 'no-cache');
-    next();
-  });
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 
-  app.use('/', authenticationRouter)
-  app.use('/', userRouter)
-
-  app.listen(port, () => {
-    console.log(`App is listening on port ${port}`)
-  })
-}
-
-async function initDb(mongoUrl: string, dbName: string) {
-  // connect to mongodb
-  connection = await MongoClient.connect(mongoUrl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
-  return connection.db(dbName);
-}
-
-start();
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});

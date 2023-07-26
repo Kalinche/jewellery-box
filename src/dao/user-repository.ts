@@ -3,7 +3,7 @@ import { Db, MongoClient, ObjectId } from 'mongodb';
 
 const dbUrl = 'mongodb://localhost:27017/';
 
-const dbName = 'cooking'
+const dbName = 'rudby'
 const collection = 'users'
 
 let db: Db;
