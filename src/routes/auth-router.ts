@@ -50,6 +50,7 @@ authenticationRouter.post("/login", async (req, res, next) => {
 
 authenticationRouter.post("/register", async (req, res, next) => {
   // validate new user
+  console.log("Start reegistering a user");
   const newUser = req.body;
   try {
     await indicative.validator.validate(newUser, {
@@ -77,7 +78,7 @@ authenticationRouter.post("/register", async (req, res, next) => {
     );
 
     res.status(201).location(`/api/users/${newUser.id}`).json(created);
-  } catch (err) { 
+  } catch (err) {
     next(err);
   }
 });

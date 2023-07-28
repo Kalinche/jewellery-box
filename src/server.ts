@@ -2,10 +2,17 @@ import express from 'express';
 import { ObjectId } from 'mongodb';
 import { userRepository } from './dao/user-repository';
 import { User, validateUser } from './model/user.model';
+import authenticationRouter from './routes/auth-router';
+import cors from 'cors';
 
 const app = express();
 
 const port = 2704;
+
+app.use(cors());
+
+app.use('/auth', authenticationRouter);
+app.use()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
