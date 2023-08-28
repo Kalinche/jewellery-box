@@ -4,10 +4,12 @@ import { UserRepository } from "../dao/user-repository";
 import * as indicative from "indicative";
 import * as bcrypt from "bcryptjs";
 import { ObjectId } from "mongodb";
+import { verifyToken } from "../middleware/verifyToken";
 
 const userRouter = Router();
 
-userRouter.get("/users", (req, res, next) =>
+userRouter.get("/", verifyToken, (req, res, next) =>
+  // TODO: make available only for admins
   (<UserRepository>req.app.locals.userRepo)
     .getAllUsers()
     .then((users) =>
@@ -20,8 +22,8 @@ userRouter.get("/users", (req, res, next) =>
     .catch(next)
 );
 
-userRouter.get("/:id", async (req, res, next) => {
-  // validate id
+userRouter.get("/:id", verifyToken, async (req, res, next) => {
+  console.log("Getting the user with id: " + req.params.id);
   try {
     const id = req.params.id;
     await indicative.validator.validate(
@@ -37,15 +39,16 @@ userRouter.get("/:id", async (req, res, next) => {
   // find user
   try {
     const found = await (<UserRepository>req.app.locals.userRepo).getUser(
-        new ObjectId(req.params.id)
+      new ObjectId(req.params.id)
     );
-    res.json(found); //200 OK with deleted user in the body
+    res.json(found);
   } catch (err) {
     next(err);
   }
 });
 
-userRouter.post("/", async (req, res, next) => {
+userRouter.post("/", verifyToken, async (req, res, next) => {
+  // TODO: make available only for admins
   // validate new user
   const newUser = req.body;
   try {
@@ -73,13 +76,15 @@ userRouter.post("/", async (req, res, next) => {
       newUser
     );
 
-    res.status(201).location(`/api/users/${newUser.id}`).json(created);
+    res.status(201).location(`/${newUser.id}`).json(created);
   } catch (err) {
     next(err);
   }
 });
 
-userRouter.delete("/:id", async function (req, res, next) {
+userRouter.delete("/:id", verifyToken, async function (req, res, next) {
+  // TODO: make available only for admins
+
   // validate id
   try {
     const id = req.params.id;
@@ -98,7 +103,7 @@ userRouter.delete("/:id", async function (req, res, next) {
     const deleted = await (<UserRepository>req.app.locals.userRepo).deleteUser(
       new ObjectId(userId)
     );
-    
+
     res.json(deleted); //200 OK with deleted user in the body
   } catch (err) {
     next(err);

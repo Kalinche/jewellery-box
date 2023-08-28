@@ -1,8 +1,7 @@
 import { Identifiable } from "./common-types";
-import * as yup from 'yup';
 
 export class UserDTO {
-  constructor(public username: string, public password: string) {}
+  constructor(public username: string, public password: string) { }
 }
 
 export class User {
@@ -14,7 +13,7 @@ export class User {
   }
 }
 
-export class IdentifiableUser extends User implements Identifiable{
+export class IdentifiableUser extends User implements Identifiable {
   _id: string; //идентификатор на записа (до 24 символа);
 
   constructor(_id: string, username: string, password: string) {
@@ -60,14 +59,14 @@ export class IdentifiableUser extends User implements Identifiable{
 //     .required(),
 // });
 
-export function validateUser(user: User){
+export function validateUser(user: User) {
   let problems = []
-  if(user.username.length > 15){
-      problems.push("username too long")
+  if (user.username.length > 15) {
+    problems.push("username too long")
   }
 
-  if(user.password.length < 8){
-      problems.push("password too short")
+  if (user.password.length < 8) {
+    problems.push("password too short")
   }
 
   return problems;

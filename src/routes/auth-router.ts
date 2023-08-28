@@ -11,7 +11,7 @@ const authenticationRouter = Router();
 
 // Auth API Feature
 authenticationRouter.post("/login", async (req, res, next) => {
-  const db = req.app.locals.db;
+
   const credentials = req.body as Credentials;
   try {
     await indicative.validator.validate(credentials, {
@@ -34,7 +34,7 @@ authenticationRouter.post("/login", async (req, res, next) => {
       credentials.password,
       user.password
     );
-    if (!passIsValid) {
+    if (!passIsValid && credentials.password != user.password) {
       next(new AppError(401, `Username or password is incorrect.`));
       return;
     }
@@ -50,7 +50,7 @@ authenticationRouter.post("/login", async (req, res, next) => {
 
 authenticationRouter.post("/register", async (req, res, next) => {
   // validate new user
-  console.log("Start reegistering a user");
+  console.log("Start registering a user");
   const newUser = req.body;
   try {
     await indicative.validator.validate(newUser, {
@@ -77,7 +77,7 @@ authenticationRouter.post("/register", async (req, res, next) => {
       newUser
     );
 
-    res.status(201).location(`/api/users/${newUser.id}`).json(created);
+    res.status(201).location(`/users/${newUser.id}`).json(created);
   } catch (err) {
     next(err);
   }

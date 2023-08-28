@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/Form.css";
 import { useNavigate } from 'react-router-dom';
-import { User } from "../model/user.model";
+import { User } from "../../model/user.model";
 
 const Register = () => {
   const [user, setUser] = useState<User>(new User("", ""));
@@ -13,6 +13,13 @@ const Register = () => {
   };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +33,7 @@ const Register = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username: user.username , password : user.password}),
+        body: JSON.stringify({ username: user.username, password: user.password }),
       });
       const data = await response.json();
       console.log(data);
