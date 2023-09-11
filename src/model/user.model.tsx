@@ -1,73 +1,73 @@
 import { Identifiable } from "./common-types";
 
+type ValidGSM = string;
+type ValidEmail = string;
+
 export class UserDTO {
-  constructor(public username: string, public password: string) { }
+  name!: string;          // Име на потребителя
+  username!: string;      // login име (username - до 15 символа - word characters)
+  brandName?: string;     // Име на марката или фирмата
+  password!: string;      // парола (поне 8 символа, поне една цифра и знак различен от буква и цифра)
+  bio?: string;           // Кратка биография или описание
+  email!: ValidEmail;
+  gsm?: ValidGSM;           // GSM номер за контакт
+  website?: string;       // Уеб сайт
+
+  constructor(config: Partial<UserDTO>) {
+    Object.assign(this, config);
+  }
 }
 
 export class User {
-  username: string; //login име (username - до 15 символа - word characters);
-  password: string; //парола (поне 8 символа, поне една цифра и знак различен от буква и цифра);
-  constructor(username: string, password: string) {
+  name: string;          // Име на потребителя
+  username: string;      // login име (username - до 15 символа - word characters);
+  brandName: string;     // Име на марката или фирмата
+  password: string;      // парола (поне 8 символа, поне една цифра и знак различен от буква и цифра);
+  registrationDate: Date; // Дата на регистрация
+  bio: string;           // Кратка биография или описание
+  email: string;
+  gsm: string;           // GSM номер за контакт
+  website: string;       // Уеб сайт
+
+  constructor(
+    name: string,
+    username: string,
+    brandName: string,
+    password: string,
+    registrationDate: Date,
+    bio: string,
+    email: string,
+    gsm: string,
+    website: string
+  ) {
+    this.name = name;
     this.username = username;
+    this.brandName = brandName;
     this.password = password;
+    this.registrationDate = registrationDate;
+    this.bio = bio;
+    this.email = email;
+    this.gsm = gsm;
+    this.website = website;
   }
 }
 
 export class IdentifiableUser extends User implements Identifiable {
-  _id: string; //идентификатор на записа (до 24 символа);
+  _id: string; // идентификатор на записа (до 24 символа);
 
-  constructor(_id: string, username: string, password: string) {
-    super(username, password);
+  constructor(
+    _id: string,
+    name: string,
+    username: string,
+    brandName: string,
+    password: string,
+    registrationDate: Date,
+    bio: string,
+    email: string,
+    gsm: string,
+    website: string
+  ) {
+    super(name, username, brandName, password, registrationDate, bio, email, gsm, website);
     this._id = _id;
   }
-}
-
-// export const userSchema = yup.object().shape({
-//   name: yup.string().required(),
-//   username: yup
-//     .string()
-//     .max(15)
-//     .matches(/^\w+$/)
-//     .required(),
-//   password: yup
-//     .string()
-//     .min(8)
-//     .matches(/^(?=.*[0-9])(?=.*[^\w\s]).*$/)
-//     .required(),
-//   gender: yup.string().required(),
-//   role: yup.string().oneOf(['user', 'admin']).required(),
-//   photo: yup.string().url().notRequired(),
-//   description: yup.string().max(512).required(),
-//   accountStatus: yup
-//     .string()
-//     .oneOf(['active', 'suspended', 'deactivated'])
-//     .required(),
-//   registrationTime: yup.date().required(),
-//   modificationTime: yup.date().required(),
-// });
-
-// export const userDtoSchema = yup.object().shape({
-//   username: yup
-//     .string()
-//     .max(15)
-//     .matches(/^\w+$/)
-//     .required(),
-//   password: yup
-//     .string()
-//     .min(8)
-//     .matches(/^(?=.*[0-9])(?=.*[^\w\s]).*$/)
-//     .required(),
-// });
-
-export function validateUser(user: User) {
-  let problems = []
-  if (user.username.length > 15) {
-    problems.push("username too long")
-  }
-
-  if (user.password.length < 8) {
-    problems.push("password too short")
-  }
-
-  return problems;
 }
