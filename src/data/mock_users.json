@@ -3,21 +3,42 @@
         "_id": {
             "$oid": "612816f71efc262e42d32661"
         },
-        "username": "user1",
-        "password": "pass123"
+        "name": "Иван Петров",
+        "username": "jewelivan",
+        "brandName": "Петров Престиж",
+        "password": "pass123",
+        "registrationDate": "2023-08-27",
+        "bio": "Основател на 'Петров Престиж' - лидер в производството на ръчно изработени бижута от благородни метали.",
+        "email": "ivan.petrov@petrovprestige.bg",
+        "gsm": "0891234567",
+        "website": "https://petrovprestige.bg"
     },
     {
         "_id": {
             "$oid": "612816f71efc262e42d32662"
         },
-        "username": "user2",
-        "password": "pass456"
+        "name": "Мария Георгиева",
+        "username": "wholesaleMaria",
+        "brandName": "Елегант Джулълър",
+        "password": "pass456",
+        "registrationDate": "2023-06-15",
+        "bio": "Мария Георгиева е купувач на бижута на едро с над 10 години опит, представляващ 'Елегант Ювелир' - верига магазини за луксозни бижута.",
+        "email": "maria.georgieva@elegantjeweler.bg",
+        "gsm": "0892345678",
+        "website": "https://elegantjeweler.bg"
     },
     {
         "_id": {
             "$oid": "612816f71efc262e42d32663"
         },
-        "username": "user3",
-        "password": "pass789"
+        "name": "Георги Николов",
+        "username": "gemGeorgi",
+        "brandName": "Брилянт Мастър",
+        "password": "pass789",
+        "registrationDate": "2023-01-10",
+        "bio": "Георги Николов е бижутер и специалист по обработка на диаманти. Собственик на 'Брилянт Мастър' - ателие за изработка и реставрация на бижута.",
+        "email": "georgi.nikolov@brilliantmaster.bg",
+        "gsm": "0893456789",
+        "website": "https://brilliantmaster.bg"
     }
 ]

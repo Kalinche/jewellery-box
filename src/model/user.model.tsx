@@ -1,13 +1,14 @@
 import { Identifiable } from "./common-types";
 
-type ValidGSM = string;
 type ValidEmail = string;
+type ValidGSM = string;
+type ValidPassword = string;
 
 export class UserDTO {
   name!: string;          // Име на потребителя
   username!: string;      // login име (username - до 15 символа - word characters)
   brandName?: string;     // Име на марката или фирмата
-  password!: string;      // парола (поне 8 символа, поне една цифра и знак различен от буква и цифра)
+  password!: ValidPassword;      // парола (поне 8 символа, поне една цифра и знак различен от буква и цифра)
   bio?: string;           // Кратка биография или описание
   email!: ValidEmail;
   gsm?: ValidGSM;           // GSM номер за контакт
@@ -22,22 +23,22 @@ export class User {
   name: string;          // Име на потребителя
   username: string;      // login име (username - до 15 символа - word characters);
   brandName: string;     // Име на марката или фирмата
-  password: string;      // парола (поне 8 символа, поне една цифра и знак различен от буква и цифра);
+  password: ValidPassword;      // парола (поне 8 символа, поне една цифра и знак различен от буква и цифра);
   registrationDate: Date; // Дата на регистрация
   bio: string;           // Кратка биография или описание
-  email: string;
-  gsm: string;           // GSM номер за контакт
+  email: ValidEmail;
+  gsm: ValidGSM;           // GSM номер за контакт
   website: string;       // Уеб сайт
 
   constructor(
     name: string,
     username: string,
     brandName: string,
-    password: string,
+    password: ValidPassword,
     registrationDate: Date,
     bio: string,
-    email: string,
-    gsm: string,
+    email: ValidEmail,
+    gsm: ValidGSM,
     website: string
   ) {
     this.name = name;
@@ -70,4 +71,41 @@ export class IdentifiableUser extends User implements Identifiable {
     super(name, username, brandName, password, registrationDate, bio, email, gsm, website);
     this._id = _id;
   }
+}
+
+export function validatePassword(password: string, confirmPassword: string): string[] {
+  const errors: string[] = [];
+  if (password.length < 10 || password.length > 30) {
+    errors.push("Password should be between 10 to 30 characters long.");
+  }
+  if (password !== confirmPassword) {
+    errors.push("Passwords do not match!");
+  }
+  if (!/\d/.test(password)) {
+    errors.push("Password should contain at least one number.");
+  }
+  if (!/[A-Z]/.test(password)) {
+    errors.push("Password should contain at least one uppercase letter.");
+  }
+  if (!/^[a-zA-Z0-9]*$/.test(password)) {
+    errors.push("Password should only contain Latin characters and numbers.");
+  }
+  return errors;
+}
+
+export function validateEmail(email: ValidEmail): string[] {
+  const errors: string[] = [];
+  const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  if (!emailPattern.test(email)) {
+    errors.push("Invalid email format.");
+  }
+  return errors;
+}
+
+export function validateRequiredFields(user: UserDTO): string[] {
+  const errors: string[] = [];
+  if (!user.username || !user.password || !user.name || !user.email) {
+    errors.push("Fields for username, password, name, and email should not be empty.");
+  }
+  return errors;
 }

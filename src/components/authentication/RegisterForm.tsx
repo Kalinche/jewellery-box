@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./styles/Form.css";
 import { useNavigate } from 'react-router-dom';
-import { UserDTO } from "../../model/user.model";
+import { UserDTO, validateEmail, validatePassword, validateRequiredFields } from "../../model/user.model";
 
 const Register = () => {
   const initialUserState = new UserDTO({
@@ -56,40 +56,14 @@ const Register = () => {
     navigate('/login');
   };
 
-  const validateForm = () => {
-    let problems = [];
+  const validateForm: () => string[] = () => {
+    const passwordErrors = validatePassword(user.password, confirmPassword);
+    const emailErrors = validateEmail(user.email);
+    const requiredFieldsErrors = validateRequiredFields(user);
 
-    if (user.password.length < 10 || user.password.length > 30) {
-      problems.push("Password should be between 10 to 30 characters long.");
-    }
-
-    if (user.password !== confirmPassword) {
-      problems.push("Passwords do not match!");
-    }
-
-    if (!/\d/.test(user.password)) {
-      problems.push("Password should contain at least one number.");
-    }
-
-    if (!/[A-Z]/.test(user.password)) {
-      problems.push("Password should contain at least one uppercase letter.");
-    }
-
-    if (!/^[a-zA-Z0-9]*$/.test(user.password)) {
-      problems.push("Password should only contain Latin characters and numbers.");
-    }
-
-    const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    if (!emailPattern.test(user.email)) {
-      problems.push("Invalid email format.");
-    }
-
-    if (!user.username || !user.password || !user.name || !user.email) {
-      problems.push("Fields for username, password, name, and email should not be empty.");
-    }
-
+    const problems = [...passwordErrors, ...emailErrors, ...requiredFieldsErrors];
     return problems;
-  };
+  }
 
   return (
     <div className="form-container">
