@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./styles/Form.css";
 import { useNavigate } from 'react-router-dom';
-import { UserDTO, validateEmail, validatePassword, validateRequiredFields } from "../../model/user.model";
+import { UserDTO, validateEmail, validateGSM, validatePassword, validateRequiredFields } from "../../model/user.model";
 
 const Register = () => {
   const initialUserState = new UserDTO({
@@ -59,9 +59,13 @@ const Register = () => {
   const validateForm: () => string[] = () => {
     const passwordErrors = validatePassword(user.password, confirmPassword);
     const emailErrors = validateEmail(user.email);
+    var gsmErrors: string[] = [];
+    if (user.gsm) {
+      gsmErrors = validateGSM(user.gsm);
+    }
     const requiredFieldsErrors = validateRequiredFields(user);
 
-    const problems = [...passwordErrors, ...emailErrors, ...requiredFieldsErrors];
+    const problems = [...passwordErrors, ...emailErrors, ...gsmErrors, ...requiredFieldsErrors];
     return problems;
   }
 

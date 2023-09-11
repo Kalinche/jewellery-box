@@ -93,6 +93,14 @@ export function validatePassword(password: string, confirmPassword: string): str
   return errors;
 }
 
+export function validateGSM(gsm: string): string[] {
+  const errors: string[] = [];
+  if (!/^0[89][0-9]{8}$/.test(gsm)) {
+    errors.push("Invalid gsm format. Should be in the form of 0894758365");
+  }
+  return errors;
+}
+
 export function validateEmail(email: ValidEmail): string[] {
   const errors: string[] = [];
   const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
