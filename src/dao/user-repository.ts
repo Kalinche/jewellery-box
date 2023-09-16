@@ -10,20 +10,20 @@ let db: Db;
 
 export class UserRepository {
 
-    constructor(){
+    constructor() {
         this.connect()
     }
 
-    async connect(): Promise<void>{
+    async connect(): Promise<void> {
         const con = await MongoClient.connect(dbUrl);
         db = con.db(dbName);
     }
 
-    async addUser(user: User){
+    async addUser(user: User) {
         const res = await db.collection(collection).insertOne(user);
         return res.insertedId
     }
-    async getAllUsers(): Promise<IdentifiableUser[]>{
+    async getAllUsers(): Promise<IdentifiableUser[]> {
         const users = await db.collection(collection).find<IdentifiableUser>({}).toArray();
         return users;
     }
@@ -34,12 +34,18 @@ export class UserRepository {
         return user;
     }
 
-    async getUser(userId: ObjectId){
+    async getUserByEmail(email: string): Promise<IdentifiableUser | null> {
+        const user = await db.collection(collection)
+            .findOne<IdentifiableUser>({ email: email });
+        return user;
+    }
+
+    async getUser(userId: ObjectId) {
         const user = await db.collection(collection)
             .findOne<IdentifiableUser>({ _id: userId });
         return user;
     }
-    async deleteUser(userId: ObjectId){
+    async deleteUser(userId: ObjectId) {
         const user = await db.collection(collection)
             .deleteOne({ _id: userId });
         return user;

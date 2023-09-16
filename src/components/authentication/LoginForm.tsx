@@ -34,7 +34,7 @@ const Login = () => {
         },
         body: JSON.stringify({ username, password }),
       });
-      if (response.status == 401) {
+      if (response.status === 401) {
         setError("Invalid username or password.");
       } else if (!response.ok) {
         setError("Login failed.");

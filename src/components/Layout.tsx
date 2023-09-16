@@ -1,7 +1,6 @@
 import { Outlet, Link, useLoaderData } from "react-router-dom";
 
 import "./styles/Layout.css";
-import { useState } from "react";
 
 const Layout = () => {
   const token = useLoaderData();
