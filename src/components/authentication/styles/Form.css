@@ -63,6 +63,11 @@ form input[type="submit"]:hover {
   background-color: #0056b3;
 }
 
+form input[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .error-message {
   color: red;
   margin-top: 10px;

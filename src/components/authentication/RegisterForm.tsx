@@ -2,18 +2,24 @@ import React, { useEffect, useState } from "react";
 import "./styles/Form.css";
 import { useNavigate } from 'react-router-dom';
 import { UserDTO, validateEmail, validateGSM, validatePassword, validateRequiredFields } from "../../model/user.model";
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const initialUserState = new UserDTO({
     name: "",
     username: "",
+    brandName: "",
     password: "",
-    email: ""
+    bio: "",
+    email: "",
+    gsm: "",
+    website: ""
   });
 
   const [user, setUser] = useState<UserDTO>(initialUserState);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -33,6 +39,8 @@ const Register = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setIsSubmitting(true);
+
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
@@ -40,20 +48,31 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:2704/register", {
+      const response = await fetch("http://localhost:2704/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(user),
       });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+      if (response.status === 409) {
+        const errorData = await response.json();
+        toast.error(errorData.message);
+      } else if (!response.ok) {
+        toast.error(`Failed to register. Please try again later. Status: ${response.statusText}`);
+      } else {
+        const data = await response.json();
+        console.log(data);
+        toast.success("Successfully registered! Redirecting to login page...");
 
-    navigate('/login');
+        setTimeout(() => {
+          navigate('/login');
+          setIsSubmitting(false);
+        }, 3000);
+      }
+    } catch (error) {
+      throw new Error("Error:" + error);
+    }
   };
 
   const validateForm: () => string[] = () => {
@@ -159,7 +178,7 @@ const Register = () => {
         {errors.map((error, index) => (
           <p key={index} className="error-message">{error}</p>
         ))}
-        <input type="submit" value="Register" />
+        <input type="submit" value="Register" disabled={isSubmitting} />
       </form>
     </div >
   );

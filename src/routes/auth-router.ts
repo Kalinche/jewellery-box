@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { AppError } from "../model/errors";
 import { UserRepository } from "../dao/user-repository";
-import * as indicative from "indicative";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import { secret } from "../config/secret";
@@ -13,30 +12,20 @@ const authenticationRouter = Router();
 authenticationRouter.post("/login", async (req, res, next) => {
 
   const credentials = req.body as Credentials;
-  try {
-    await indicative.validator.validate(credentials, {
-      username: "required",
-      password: "required|string|min:6",
-    });
-  } catch (err) {
-    next(new AppError(400, (err as Error).message, err as Error));
-    return;
-  }
+
   try {
     const user = await (<UserRepository>req.app.locals.userRepo).getUserByUsername(
       credentials.username
     );
     if (!user) {
-      next(new AppError(401, `Username or password is incorrect.`));
-      return;
+      throw new AppError(401, `Username or password is incorrect.`);
     }
     const passIsValid = await bcrypt.compare(
       credentials.password,
       user.password
     );
     if (!passIsValid && credentials.password != user.password) {
-      next(new AppError(401, `Username or password is incorrect.`));
-      return;
+      throw new AppError(401, `Username or password is incorrect.`);
     }
     const token = jwt.sign({ id: user._id }, secret, {
       expiresIn: "1h", //expires in 1h
@@ -52,21 +41,16 @@ authenticationRouter.post("/register", async (req, res, next) => {
   // validate new user
   console.log("Start registering a user");
   const newUser = req.body;
+
   try {
-    await indicative.validator.validate(newUser, {
-      id: "regex:^[0-9a-fA-F]{24}$",
-    });
-  } catch (err) {
-    next(new AppError(400, (err as Error).message, err as Error));
-    return;
-  }
-  // create user in db
-  try {
-    const found = await (<UserRepository>(
-      req.app.locals.userRepo
-    )).getUserByUsername(newUser.username);
-    if (found) {
-      throw new AppError(400, `Username already taken: "${newUser.username}".`);
+    const foundByUsername = await (<UserRepository>req.app.locals.userRepo).getUserByUsername(newUser.username);
+    if (foundByUsername) {
+      throw new AppError(409, `Username already taken.`);
+    }
+
+    const foundByEmail = await (<UserRepository>req.app.locals.userRepo).getUserByEmail(newUser.email);
+    if (foundByEmail) {
+      throw new AppError(409, `Email already registered.`);
     }
 
     // hash password
