@@ -14,10 +14,7 @@ const Layout = () => {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/projects">Projects</Link>
-            </li>
-            <li>
-              <Link to="/tasks">Tasks</Link>
+              <Link to="/add-jewellery">Add Jewellery</Link>
             </li>
             <li>
               <Link to="/profile">Profile</Link>

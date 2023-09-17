@@ -1,3 +1,4 @@
+import { SerialNumberRepository } from "../dao/serial-number-repository";
 import { Identifiable } from "./common-types";
 
 enum JewelleryType {
@@ -26,6 +27,7 @@ class Jewellery {
     style: string;           // стил
     gender: Gender;          // пол (жена, мъж, унисекс)
     description: string;     // дълго описание
+    serialNumber: number;
 
     constructor(params: {
         price: number;
@@ -39,6 +41,7 @@ class Jewellery {
         style: string;
         gender: Gender;
         description: string;
+        serialNumber: number;
     }) {
         this.price = params.price;
         this.visibility = params.visibility;
@@ -51,6 +54,7 @@ class Jewellery {
         this.style = params.style;
         this.gender = params.gender;
         this.description = params.description;
+        this.serialNumber = params.serialNumber
     }
 }
 
@@ -69,7 +73,8 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
         tags: string[],
         style: string,
         gender: Gender,
-        description: string
+        description: string,
+        serialNumber: number,
     ) {
         super({
             price,
@@ -82,10 +87,41 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
             tags,
             style,
             gender,
-            description
+            description,
+            serialNumber
         });
         this._id = _id;
     }
 }
 
-export { Jewellery, IdentifiableJewellery, JewelleryType, Gender };
+class JewelleryDTO {
+    type!: string;
+    collection?: string;
+    material?: string;
+    description?: string;
+    price!: number;
+    imageUrl?: string;
+
+    constructor(init: Partial<JewelleryDTO>) {
+        Object.assign(this, init);
+    }
+}
+
+const validateRequiredFields = (jewellery: JewelleryDTO): string[] => {
+    const errors: string[] = [];
+
+    if (!jewellery.type) {
+        errors.push("Type is required.");
+    }
+
+    if (jewellery.price <= 0) {
+        errors.push("Price must be a positive number.");
+    } else if (jewellery.price > 100000) {  // You can adjust this limit based on your needs.
+        errors.push("Price seems too high.");
+    }
+
+    return errors;
+};
+
+
+export { Jewellery, IdentifiableJewellery, JewelleryType, Gender, JewelleryDTO, validateRequiredFields };
