@@ -18,13 +18,11 @@ export class SerialNumberRepository {
         db = con.db(dbName);
     }
 
-    // Получаване на текущата стойност на серийния номер
     async getSerialNumber(): Promise<number> {
         const serialDoc = await db.collection(serialNumberCollection).findOne({});
         if (serialDoc && serialDoc.current) {
             return serialDoc.current;
         } else {
-            // Ако документът не съществува, създайте нов с начална стойност
             await this.initializeSerialNumber();
             return 1;
         }

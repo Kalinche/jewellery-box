@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import "./authentication/styles/Form.css";
 import { useNavigate } from 'react-router-dom';
-import { JewelleryDTO, validateRequiredFields } from "../model/jewellery.model";
+import { Currency, JewelleryDTO, JewelleryType, validateRequiredFields } from "../model/jewellery.model";
 import { toast } from 'react-toastify';
 
 const AddJewellery = () => {
     const initialJewelleryState = new JewelleryDTO({
-        type: "",
+        name: "",
+        type: JewelleryType.BRACELET,
         collection: "",
         material: "",
         description: "",
         price: 0,
+        currency: Currency.BGN,
         imageUrl: ""
     });
 
@@ -18,7 +20,7 @@ const AddJewellery = () => {
     const [errors, setErrors] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
         setJewellery((prevJewellery: JewelleryDTO) => ({ ...prevJewellery, [name]: value }));
         setErrors([]);  // clear previous errors on input change
@@ -56,16 +58,22 @@ const AddJewellery = () => {
             });
 
             if (!response.ok) {
+
                 toast.error(`Failed to add the jewellery. Please try again later. Status: ${response.statusText}`);
+                setTimeout(() => {
+                    setIsSubmitting(false);
+                }, 2000);
+
             } else {
+
                 const data = await response.json();
                 console.log(data);
                 toast.success("Jewellery added successfully!");
 
                 setTimeout(() => {
-                    navigate('/jewellery-list');
-                    setIsSubmitting(false);
+                    navigate('/jewelleries');
                 }, 2000);
+
             }
         } catch (error) {
             throw new Error("Error:" + error);
@@ -81,15 +89,31 @@ const AddJewellery = () => {
     return (
         <div className="form-container">
             <form onSubmit={handleAdd}>
-                <label htmlFor="type">Type:<span className="required-star">*</span></label>
+                <label htmlFor="name">Name:</label>
                 <input
                     type="text"
+                    id="name"
+                    name="name"
+                    value={jewellery.name}
+                    onChange={handleChange}
+                    required
+                />
+
+                <label htmlFor="type">Type:<span className="required-star">*</span></label>
+                <select
                     id="type"
                     name="type"
                     value={jewellery.type}
                     onChange={handleChange}
                     required
-                />
+                >
+                    {Object.values(JewelleryType).map(type => (
+                        <option key={type} value={type}>
+                            {type.charAt(0).toUpperCase() + type.slice(1)}  {/* Capitalize the first letter */}
+                        </option>
+                    ))}
+                </select>
+
 
                 <label htmlFor="collection">Collection:</label>
                 <input
@@ -117,15 +141,31 @@ const AddJewellery = () => {
                     onChange={handleChange}
                 />
 
-                <label htmlFor="price">Price:<span className="required-star">*</span></label>
-                <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    value={jewellery.price}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="price-container">
+                    <label htmlFor="price">Price:<span className="required-star">*</span></label>
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        value={jewellery.price}
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <label htmlFor="currency"></label>
+                    <select
+                        id="currency"
+                        name="currency"
+                        value={jewellery.currency}
+                        onChange={handleChange}>
+                        {Object.entries(Currency).map(([key, symbol]) => (
+                            <option key={key} value={symbol}>
+                                {symbol}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
 
                 <label htmlFor="imageUrl">Image URL:</label>
                 <input

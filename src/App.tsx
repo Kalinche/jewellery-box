@@ -19,7 +19,9 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />}></Route>
       <Route path="logout" element={<Logout />}></Route>
       <Route path="profile" element={<ProfileView />}></Route>
-      <Route path="add-jewellery" element={<AddJewellery />}></Route>
+      <Route path="jewelleries">
+        <Route index element={<AddJewellery />}></Route>
+      </Route>
     </Route>
   )
 );

@@ -1,6 +1,12 @@
 import { ObjectId } from "mongodb";
 import { Identifiable } from "./common-types";
 
+export enum Currency {
+    BGN = 'лв.',
+    USD = '$',
+    EUR = '€'
+}
+
 enum JewelleryType {
     BRACELET = 'bracelet',
     NECKLACE = 'necklace',
@@ -16,8 +22,10 @@ enum Gender {
 }
 
 class Jewellery {
-    jewellerId: ObjectId
+    jewellerId: ObjectId;
+    name: string;
     price: number;           // цена в лева (две числа след десетичната запетая)
+    currency: Currency;
     visibility: boolean;     // видимост
     craftingTime: number;    // време за изработка в минути
     count: number;           // брой
@@ -31,8 +39,10 @@ class Jewellery {
     serialNumber: number;
 
     constructor(params: {
-        jewellerId: ObjectId
+        jewellerId: ObjectId;
+        name: string;
         price: number;
+        currency: Currency;
         visibility: boolean;
         craftingTime: number;
         count: number;
@@ -46,7 +56,9 @@ class Jewellery {
         serialNumber: number;
     }) {
         this.jewellerId = params.jewellerId
+        this.name = params.name
         this.price = params.price;
+        this.currency = params.currency;
         this.visibility = params.visibility;
         this.craftingTime = params.craftingTime;
         this.count = params.count;
@@ -62,12 +74,14 @@ class Jewellery {
 }
 
 class IdentifiableJewellery extends Jewellery implements Identifiable {
-    _id: string; // идентификатор на записа (до 24 символа);
+    _id: string;
 
     constructor(
         _id: string,
         jewellerId: ObjectId,
+        name: string,
         price: number,
+        currency: Currency,
         visibility: boolean,
         craftingTime: number,
         count: number,
@@ -82,7 +96,9 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
     ) {
         super({
             jewellerId,
+            name,
             price,
+            currency,
             visibility,
             craftingTime,
             count,
@@ -100,11 +116,13 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
 }
 
 class JewelleryDTO {
-    type!: string;
+    name?: string;
+    type!: JewelleryType;
     collection?: string;
     material?: string;
     description?: string;
     price!: number;
+    currency!: Currency;
     imageUrl?: string;
 
     constructor(init: Partial<JewelleryDTO>) {

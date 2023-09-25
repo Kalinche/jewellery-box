@@ -80,3 +80,22 @@ form input[type="submit"]:disabled {
   color: red;
   margin-left: 5px;
 }
+
+.price-container {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.price-container label,
+.price-container input,
+.price-container select {
+  flex: 1;
+  margin-right: 0px;
+}
+
+/* .price-container label:last-child,
+.price-container input:last-child,
+.price-container select:last-child {
+  margin-right: 0;
+} */

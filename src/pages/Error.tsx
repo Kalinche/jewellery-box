@@ -5,7 +5,6 @@ import './Error.css';
 const ErrorPage = () => {
 
   const navigate = useNavigate();
-  navigate("/");
 
   return (
     <div className="error-container">
