@@ -1,10 +1,7 @@
-import { NextFunction, Request as ExpressRequest, Response } from "express";
+import { NextFunction, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import { secret } from "../config/secret";
-
-export interface Request extends ExpressRequest {
-  userId?: string;
-}
+import { Request } from "../model/common-types"
 
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
   const token = req.headers["x-access-token"];

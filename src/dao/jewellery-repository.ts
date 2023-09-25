@@ -20,14 +20,16 @@ export class JewelleryRepository {
         db = con.db(dbName);
     }
 
-    async addJewellery(jewellery: Jewellery): Promise<Jewellery> {
-        const serialModel = await serialNumberRepository.getSerialNumber();
+    async addJewellery(jewellery: Jewellery, userId: ObjectId) {
+        const serialNumber = await serialNumberRepository.getSerialNumber();
 
-        jewellery.serialNumber = serialModel.current;
+        jewellery.serialNumber = serialNumber;
         await serialNumberRepository.incrementSerialNumber();
 
+        jewellery.jewellerId = userId;
+
         const result = await db.collection(collection).insertOne(jewellery);
-        return result;
+        return result.insertedId;
     }
 
 

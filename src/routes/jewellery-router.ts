@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { Request } from "../model/common-types"
 import { AppError } from "../model/errors";
 import { JewelleryRepository } from "../dao/jewellery-repository";
 import * as indicative from "indicative";
@@ -37,19 +38,19 @@ jewelleryRouter.get("/:id", verifyToken, async (req, res, next) => {
     }
 });
 
-jewelleryRouter.post("/", verifyToken, async (req, res, next) => {
-    const newJewellery = req.body;
-    try {
-        // Тук можете да добавите валидация на новите бижута, ако е необходимо.
-    } catch (err) {
-        next(new AppError(400, (err as Error).message, err as Error));
-        return;
-    }
-    try {
-        const created = await (<JewelleryRepository>req.app.locals.jewelleryRepo).addJewellery(newJewellery);
-        res.status(201).location(`/${created.id}`).json(created);
-    } catch (err) {
-        next(err);
+jewelleryRouter.post("/", verifyToken, async (req: Request, res, next) => {
+    console.log("Adding jewellery...")
+    if (req.userId) {
+        const userIdObjectId = new ObjectId(req.userId);
+        const newJewellery = req.body;
+
+        try {
+            const created = await (<JewelleryRepository>req.app.locals.jewelleryRepo).addJewellery(newJewellery, userIdObjectId);
+            res.status(201).location(`/${created.id}`).json(created);
+        } catch (err) {
+            console.log("err: " + err)
+            next(err);
+        }
     }
 });
 

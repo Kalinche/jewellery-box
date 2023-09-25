@@ -23,7 +23,6 @@ userRouter.get("/", verifyToken, (req, res, next) =>
 );
 
 userRouter.get("/:id", verifyToken, async (req, res, next) => {
-  console.log("Getting the user with id: " + req.params.id);
   try {
     const id = req.params.id;
     await indicative.validator.validate(

@@ -3,7 +3,9 @@ import { userRepository } from './dao/user-repository';
 import authenticationRouter from './routes/auth-router';
 import cors from 'cors';
 import userRouter from './routes/users-router';
+import jewelleryRouter from './routes/jewellery-router';
 import { AppError } from "./model/errors";
+import { jewelleryRepository } from './dao/jewellery-repository';
 
 const app = express();
 
@@ -12,6 +14,7 @@ const port = 2704;
 app.use(cors());
 
 app.locals.userRepo = userRepository;
+app.locals.jewelleryRepo = jewelleryRepository
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,9 +34,15 @@ app.use(function (req, res, next) {
 
 app.use('/auth', authenticationRouter);
 app.use('/users', userRouter);
+app.use('/jewelleries', jewelleryRouter);
 
-app.use(function (err: AppError, req: Request, res: Response, next: NextFunction) {
-  return res.status(err.status).json({ message: err.message })
+app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
+  if (err instanceof AppError) {
+    return res.status(err.status).json({ message: err.message });
+  } else {
+    const message = process.env.NODE_ENV === 'production' ? 'Internal Server Error' : err.message;
+    return res.status(500).json({ message: message });
+  }
 });
 
 app.get('/', (req, res) => {

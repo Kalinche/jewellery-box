@@ -1,4 +1,4 @@
-import { SerialNumberRepository } from "../dao/serial-number-repository";
+import { ObjectId } from "mongodb";
 import { Identifiable } from "./common-types";
 
 enum JewelleryType {
@@ -16,6 +16,7 @@ enum Gender {
 }
 
 class Jewellery {
+    jewellerId: ObjectId
     price: number;           // цена в лева (две числа след десетичната запетая)
     visibility: boolean;     // видимост
     craftingTime: number;    // време за изработка в минути
@@ -30,6 +31,7 @@ class Jewellery {
     serialNumber: number;
 
     constructor(params: {
+        jewellerId: ObjectId
         price: number;
         visibility: boolean;
         craftingTime: number;
@@ -43,6 +45,7 @@ class Jewellery {
         description: string;
         serialNumber: number;
     }) {
+        this.jewellerId = params.jewellerId
         this.price = params.price;
         this.visibility = params.visibility;
         this.craftingTime = params.craftingTime;
@@ -63,6 +66,7 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
 
     constructor(
         _id: string,
+        jewellerId: ObjectId,
         price: number,
         visibility: boolean,
         craftingTime: number,
@@ -77,6 +81,7 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
         serialNumber: number,
     ) {
         super({
+            jewellerId,
             price,
             visibility,
             craftingTime,

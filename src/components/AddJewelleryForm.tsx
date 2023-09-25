@@ -37,11 +37,20 @@ const AddJewellery = () => {
             return;
         }
 
+        const token = sessionStorage.getItem("token");
+        const userId = sessionStorage.getItem("userId");
+
+        if (!token) {
+            setErrors(errors => [...errors, "No token found"]);
+            return;
+        }
+
         try {
-            const response = await fetch("http://localhost:2704/jewellery/add", {
+            const response = await fetch("http://localhost:2704/jewelleries/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    'x-access-token': token
                 },
                 body: JSON.stringify(jewellery),
             });
