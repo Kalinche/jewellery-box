@@ -9,7 +9,7 @@ import ProfileView from "./components/ProfileView";
 import Logout from "./components/authentication/Logout";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AddJewellery from "./components/AddJewelleryForm";
+import AddJewellery from "./components/jewelleries/AddJewelleryForm";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

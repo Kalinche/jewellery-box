@@ -94,8 +94,8 @@ form input[type="submit"]:disabled {
   margin-right: 0px;
 }
 
-/* .price-container label:last-child,
+.price-container label:last-child,
 .price-container input:last-child,
 .price-container select:last-child {
   margin-right: 0;
-} */
+}

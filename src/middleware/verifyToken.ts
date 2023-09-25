@@ -4,14 +4,14 @@ import { secret } from "../config/secret";
 import { Request } from "../model/common-types"
 
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
-  const token = req.headers["x-access-token"];
-  if (!token) {
-    return res.status(403).send({ auth: false, message: "No token provided." });
+  const authHeader = req.header('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(403).send({ auth: false, message: "No token provided or invalid format." });
   }
 
-  let tokenToVerify = Array.isArray(token) ? token[0] : token;
+  const token = authHeader.slice(7);
 
-  jwt.verify(tokenToVerify, secret, (err: any, decoded: any) => {
+  jwt.verify(token, secret, (err: any, decoded: any) => {
     if (err) {
       return res
         .status(500)

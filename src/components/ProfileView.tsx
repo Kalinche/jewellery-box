@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { User } from '../model/user.model';
+import { toast } from 'react-toastify';
 
 function ProfileView() {
     const [userData, setUserData] = useState<User | null>(null);
@@ -21,12 +22,12 @@ function ProfileView() {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-access-token': token
+                        'Authorization': 'Bearer ' + token
                     }
                 });
 
                 if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.status);
+                    toast.error('Network response was not ok: ' + response.status);
                 }
 
                 const data = await response.json();

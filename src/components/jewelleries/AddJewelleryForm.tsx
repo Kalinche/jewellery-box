@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./authentication/styles/Form.css";
+import "../styles/Form.css";
 import { useNavigate } from 'react-router-dom';
-import { Currency, JewelleryDTO, JewelleryType, validateRequiredFields } from "../model/jewellery.model";
+import { Currency, JewelleryDTO, JewelleryType, validateRequiredFields } from "../../model/jewellery.model";
 import { toast } from 'react-toastify';
 
 const AddJewellery = () => {
@@ -52,7 +52,7 @@ const AddJewellery = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    'x-access-token': token
+                    'Authorization': 'Bearer ' + token
                 },
                 body: JSON.stringify(jewellery),
             });

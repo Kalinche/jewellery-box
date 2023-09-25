@@ -1,0 +1,24 @@
+.card-style {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.img-style {
+    width: 100%;
+    height: auto;
+    border-radius: 5px 0 0 5px;
+}
+
+.title-style {
+    font-weight: bold;
+}
+
+.list-item-style {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.last-list-item-style {
+    border-bottom: none;
+}
