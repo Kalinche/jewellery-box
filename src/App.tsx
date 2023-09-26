@@ -9,7 +9,7 @@ import ProfileView from "./components/ProfileView";
 import Logout from "./components/authentication/Logout";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AddJewellery from "./components/jewelleries/AddJewelleryForm";
+import JewelleryGrid from "./components/jewelleries/JewelleryGrid";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +20,7 @@ const router = createBrowserRouter(
       <Route path="logout" element={<Logout />}></Route>
       <Route path="profile" element={<ProfileView />}></Route>
       <Route path="jewelleries">
-        <Route index element={<AddJewellery />}></Route>
+        <Route index element={<JewelleryGrid />} ></Route>
       </Route>
     </Route>
   )

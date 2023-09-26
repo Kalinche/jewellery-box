@@ -15,7 +15,7 @@ jewelleryRouter.get("/", verifyToken, (req, res, next) =>
         .catch(next)
 );
 
-jewelleryRouter.get("/:id", verifyToken, async (req, res, next) => {
+jewelleryRouter.get("/:id", verifyToken, async (req: Request, res, next) => {
     try {
         const id = req.params.id;
         await indicative.validator.validate(
@@ -28,14 +28,22 @@ jewelleryRouter.get("/:id", verifyToken, async (req, res, next) => {
         next(new AppError(400, (err as Error).message, err as Error));
         return;
     }
+
     try {
         const found = await (<JewelleryRepository>req.app.locals.jewelleryRepo).getJewellery(
             new ObjectId(req.params.id)
         );
+
+        if (!found || found.jewellerId.toString() !== req.userId) {
+            next(new AppError(403, "Access denied! You don't have permission to access this jewellery."));
+            return;
+        }
+
         res.json(found);
     } catch (err) {
         next(err);
     }
+
 });
 
 jewelleryRouter.post("/", verifyToken, async (req: Request, res, next) => {
@@ -51,6 +59,8 @@ jewelleryRouter.post("/", verifyToken, async (req: Request, res, next) => {
             console.log("err: " + err)
             next(err);
         }
+    } else {
+        next(new AppError(401, "You should be logged in to add jewellery!"))
     }
 });
 

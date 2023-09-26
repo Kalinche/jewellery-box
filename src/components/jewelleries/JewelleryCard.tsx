@@ -1,30 +1,31 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Jewellery } from '../../model/jewellery.model';
-import '../styles/JewelleryCard.css';
+import exp from 'constants';
+import { IdentifiableJewellery } from '../../model/jewellery.model';
+import '../styles/Card.css';
 
-const JewelleryCard = ({ jewellery }: { jewellery: Jewellery }) => {
+const JewelleryCard = ({ jewellery }: { jewellery: IdentifiableJewellery }) => {
     return (
-        <div className="card card-style mb-3" style={{ maxWidth: '540px' }}>
-            <div className="row g-0">
-                <div className="col-md-4">
-                    <img
-                        src={jewellery.photos?.[0] || 'placeholder-image-url.jpg'}
-                        alt={jewellery.name || `Serial Number: ${jewellery.serialNumber}`}
-                        className="img-fluid rounded-start img-style"
-                    />
-                </div>
-                <div className="col-md-8">
-                    <div className="card-body">
-                        <h5 className="card-title title-style">{jewellery.name || `Serial Number: ${jewellery.serialNumber}`}</h5>
-                        <p className="card-text">{jewellery.description}</p>
-                        <ul className="list-group list-group-flush">
-                            <li className="list-group-item list-item-style">Type: {jewellery.type}</li>
-                            <li className="list-group-item list-item-style">Collection: {jewellery.collection}</li>
-                            <li className="list-group-item list-item-style">Style: {jewellery.style}</li>
-                            <li className="list-group-item list-item-style">Gender: {jewellery.gender}</li>
-                            <li className="list-group-item list-item-style">Crafting Time: {jewellery.craftingTime} mins</li>
-                            <li className="list-group-item last-list-item-style">Price: {jewellery.price} {jewellery.currency}</li>
-                        </ul>
+        <div className="card mb-3">
+            <div className="card-row">
+                <div className="card-body">
+                    <h5 className="card-title">{jewellery.name || `Serial Number: ${jewellery.serialNumber}`}</h5>
+                    <p className="card-description">{jewellery.description}</p>
+                    <div className="card-details-img">
+                        <div className="card-image-col">
+                            <img
+                                src={jewellery.photos?.[0] || 'https://t3.ftcdn.net/jpg/03/80/50/90/360_F_380509039_Sxu7EBlre1HeJGJ02aihDbzWHMlqCoSV.jpg'}
+                                alt={jewellery.name || `Serial Number: ${jewellery.serialNumber}`}
+                                className="card-image"
+                            />
+                        </div>
+                        <div className="card-content-col">
+                            <ul className="card-details">
+                                <li className="card-list-item">Type: {jewellery.type}</li>
+                                <li className="card-list-item">Collection: {jewellery.collection}</li>
+                                <li className="card-list-item">Style: {jewellery.style}</li>
+                                <li className="card-list-item">Gender: {jewellery.gender}</li>
+                                <li className="card-list-item">Crafting Time: {jewellery.craftingTime} mins</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -52,6 +52,7 @@ const Login = () => {
         setTimeout(() => {
           console.log("Token expired. Removing information from sessionStorage.");
           sessionStorage.clear();
+          window.location.replace("/");
         }, TOKEN_EXPIRATION_TIME);
 
         window.location.replace("/");

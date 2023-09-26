@@ -1,0 +1,51 @@
+.mini-card {
+    width: 190px;
+    /* Или друга ширина, която ви харесва */
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.mini-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.mini-card img {
+    width: 90%;
+    height: 70%;
+    object-fit: cover;
+    border-radius: 5px 5px 0 0;
+    border: 0.5px solid rgba(0, 0, 0, 0.2);
+}
+
+.mini-card .mini-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    text-align: center;
+}
+
+.mini-card .mini-card-title {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.add-card {
+    border-color: rgba(137, 43, 226, 0.329);
+}
+
+.add-card button {
+    width: 80%;
+}

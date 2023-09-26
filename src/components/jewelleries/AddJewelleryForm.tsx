@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Currency, JewelleryDTO, JewelleryType, validateRequiredFields } from "../../model/jewellery.model";
 import { toast } from 'react-toastify';
 
-const AddJewellery = () => {
+const AddJewellery = ({ onCloseForm }: { onCloseForm: () => void }) => {
     const initialJewelleryState = new JewelleryDTO({
         name: "",
         type: JewelleryType.BRACELET,
@@ -40,7 +40,6 @@ const AddJewellery = () => {
         }
 
         const token = sessionStorage.getItem("token");
-        const userId = sessionStorage.getItem("userId");
 
         if (!token) {
             setErrors(errors => [...errors, "No token found"]);
@@ -180,6 +179,7 @@ const AddJewellery = () => {
                     <p key={index} className="error-message">{error}</p>
                 ))}
                 <input type="submit" value="Add Jewellery" disabled={isSubmitting} />
+                <button onClick={onCloseForm}>Cancel</button>
             </form>
         </div>
     );
