@@ -43,6 +43,12 @@
     border-radius: 0.25rem;
 }
 
+.image-container .buttons-container {
+    display: flex;
+    flex-direction: row;
+    gap: 5%
+}
+
 .card-content-col {
     flex: 0 0 65%;
     display: flex;
