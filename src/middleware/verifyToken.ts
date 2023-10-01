@@ -14,7 +14,7 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
   jwt.verify(token, secret, (err: any, decoded: any) => {
     if (err) {
       return res
-        .status(500)
+        .status(401)
         .send({ auth: false, message: "Failed to authenticate token." });
     }
     // if everything good, save to request for use in other routes

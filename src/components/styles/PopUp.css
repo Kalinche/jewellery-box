@@ -16,13 +16,18 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    max-width: 500px;
+    max-width: 700px;
     width: 80%;
     position: relative;
 }
 
-.popup-overlay button {
-    margin-top: 25px;
-    margin-bottom: 10px;
-    font-size: larger;
+.popup-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    margin-top: 10px;
+}
+
+.popup-buttons button {
+    flex: 1 1 0;
 }

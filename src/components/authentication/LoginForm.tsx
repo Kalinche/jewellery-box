@@ -3,7 +3,6 @@ import "../styles/Form.css";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  console.log("Token before login: ", sessionStorage.getItem('token'));
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -42,18 +41,10 @@ const Login = () => {
 
       const data = await response.json();
 
-      const TOKEN_EXPIRATION_TIME = 3600000;
-
       if (data.token) {
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userWithoutPassword._id);
         console.log("UserId in sessionStorage: " + sessionStorage.getItem("userId"));
-
-        setTimeout(() => {
-          console.log("Token expired. Removing information from sessionStorage.");
-          sessionStorage.clear();
-          window.location.replace("/");
-        }, TOKEN_EXPIRATION_TIME);
 
         window.location.replace("/");
       } else {

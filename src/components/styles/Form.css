@@ -1,24 +1,32 @@
-/* styles/Form.css */
 .form-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 100px);
-  /* 50px отгоре и 50px отдолу */
   max-width: 100%;
   margin: 0;
-  padding: 50px 0;
-  /* 50px отстояние от горната и долната част */
-  background-color: #f4f4f4;
+  padding: 0;
+  background-color: #d3d6d428;
+  display: flex;
+  flex-direction: column;
 }
 
 form {
   width: 300px;
   max-width: 100%;
   background-color: white;
-  padding: 20px;
+  margin-bottom: 20px;
+  padding: 25px;
   border-radius: 8px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.large-form {
+  width: 85%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 40px;
 }
 
 form label {
@@ -48,7 +56,13 @@ form textarea {
   min-height: 80px;
 }
 
+
+#photoUrl {
+  margin: 0;
+}
+
 form input[type="submit"] {
+  font-size: large;
   margin-top: 10px;
   padding: 10px;
   width: 100%;
@@ -83,8 +97,9 @@ form input[type="submit"]:disabled {
 
 .price-container {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   align-items: center;
+  gap: 10px;
 }
 
 .price-container label,
@@ -98,4 +113,43 @@ form input[type="submit"]:disabled {
 .price-container input:last-child,
 .price-container select:last-child {
   margin-right: 0;
+}
+
+.form-heading {
+  font-size: 1.5em;
+  margin-bottom: 40px;
+  margin-top: 30px;
+  text-align: center;
+  color: #333;
+}
+
+.first-column,
+.second-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-url-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 15px 0;
+  width: 100%;
+}
+
+.photo-url-item {
+  background-color: #f0f0f0;
+  max-width: auto;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  word-wrap: break-word;
+  display: flex;
+  gap: 20px;
+}
+
+.photo-url-item button {
+  margin: 0;
 }

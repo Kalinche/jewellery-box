@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { Identifiable } from "./common-types";
 
 export enum Currency {
-    BGN = 'лв.',
+    BGN = 'lev',
     USD = '$',
     EUR = '€'
 }
@@ -29,7 +29,7 @@ class Jewellery {
     visibility: boolean;     // видимост
     craftingTime: number;    // време за изработка в минути
     count: number;           // брой
-    photos: string[];        // снимки като URL адреси
+    photoUrls: string[];        // снимки като URL адреси
     collection: string;      // име на колекцията
     type: JewelleryType;     // тип бижу (гривна, огърлица и т.н.)
     tags: string[];          // етикети
@@ -46,7 +46,7 @@ class Jewellery {
         visibility: boolean;
         craftingTime: number;
         count: number;
-        photos: string[];
+        photoUrls: string[];
         collection: string;
         type: JewelleryType;
         tags: string[];
@@ -62,7 +62,7 @@ class Jewellery {
         this.visibility = params.visibility;
         this.craftingTime = params.craftingTime;
         this.count = params.count;
-        this.photos = params.photos;
+        this.photoUrls = params.photoUrls;
         this.collection = params.collection;
         this.type = params.type;
         this.tags = params.tags;
@@ -85,7 +85,7 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
         visibility: boolean,
         craftingTime: number,
         count: number,
-        photos: string[],
+        photoUrls: string[],
         collection: string,
         type: JewelleryType,
         tags: string[],
@@ -102,7 +102,7 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
             visibility,
             craftingTime,
             count,
-            photos,
+            photoUrls,
             collection,
             type,
             tags,
@@ -123,7 +123,7 @@ class JewelleryDTO {
     description?: string;
     price!: number;
     currency!: Currency;
-    imageUrl?: string;
+    photoUrls!: string[];
 
     constructor(init: Partial<JewelleryDTO>) {
         Object.assign(this, init);

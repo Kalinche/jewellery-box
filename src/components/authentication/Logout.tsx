@@ -5,7 +5,7 @@ const Logout: React.FC = () => {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        sessionStorage.removeItem("token");
+        sessionStorage.clear();
         console.log("Removed token to user: ", sessionStorage.getItem('token'));
         navigate("/");
     }, [navigate]);

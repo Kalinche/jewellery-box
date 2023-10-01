@@ -7,7 +7,7 @@
         "visibility": true,
         "craftingTime": 120,
         "count": 3,
-        "photos": [
+        "photoUrls": [
             "https://www.victoria-gold.com/image/cache/catalog/zlatoGA/GA096/zlatna%20grivna%20victoria%20gold-450x450.jpg"
         ],
         "collection": "Лятна Колекция 2023",
@@ -29,7 +29,7 @@
         "visibility": true,
         "craftingTime": 200,
         "count": 1,
-        "photos": [
+        "photoUrls": [
             "https://bj-diamonds.com/wp-content/uploads/2021/06/R04W30-R02WW1-small.jpg"
         ],
         "collection": "Сватбена Колекция 2023",
@@ -51,7 +51,7 @@
         "visibility": false,
         "craftingTime": 100,
         "count": 4,
-        "photos": [
+        "photoUrls": [
             "https://s8.badu.bg/photos/583714/800x800_63e0f84c111a2.jpg"
         ],
         "collection": "Есенна Колекция 2023",

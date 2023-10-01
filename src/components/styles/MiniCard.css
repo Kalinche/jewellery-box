@@ -1,6 +1,5 @@
 .mini-card {
     width: 190px;
-    /* Или друга ширина, която ви харесва */
     height: 250px;
     display: flex;
     flex-direction: column;
@@ -37,8 +36,8 @@
 }
 
 .mini-card .mini-card-title {
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 13px;
+    color: rgb(36, 4, 66);
     margin-top: 5px;
 }
 

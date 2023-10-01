@@ -1,4 +1,3 @@
-import exp from 'constants';
 import { IdentifiableJewellery } from '../../model/jewellery.model';
 import '../styles/Card.css';
 
@@ -12,7 +11,7 @@ const JewelleryCard = ({ jewellery }: { jewellery: IdentifiableJewellery }) => {
                     <div className="card-details-img">
                         <div className="card-image-col">
                             <img
-                                src={jewellery.photos?.[0] || 'https://t3.ftcdn.net/jpg/03/80/50/90/360_F_380509039_Sxu7EBlre1HeJGJ02aihDbzWHMlqCoSV.jpg'}
+                                src={jewellery.photoUrls?.[0] || 'https://t3.ftcdn.net/jpg/03/80/50/90/360_F_380509039_Sxu7EBlre1HeJGJ02aihDbzWHMlqCoSV.jpg'}
                                 alt={jewellery.name || `Serial Number: ${jewellery.serialNumber}`}
                                 className="card-image"
                             />

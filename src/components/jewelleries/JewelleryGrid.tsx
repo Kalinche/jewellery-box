@@ -17,6 +17,7 @@ const JewelleryGrid = () => {
 
         if (!token) {
             setError("No token found");
+            window.location.replace("/");
             return;
         }
 
@@ -31,7 +32,7 @@ const JewelleryGrid = () => {
                 });
 
                 if (!response.ok) {
-                    toast.error('Network response was not ok: ' + response.status);
+                    throw Error('Network response was not ok: ' + response.status)
                 }
 
                 const data = await response.json();
@@ -43,6 +44,10 @@ const JewelleryGrid = () => {
                     setError("An unexpected error occurred.");
                 }
             } finally {
+                if (error != null) {
+                    toast.error(error);
+                    setTimeout(() => window.location.replace("/"), 20);
+                }
                 setLoading(false);
             }
         };
@@ -61,6 +66,43 @@ const JewelleryGrid = () => {
         setSelectedJewellery(null);
     };
 
+    const handleDelete = async (id: string) => {
+        try {
+            setJewelleries(jewelleries.filter(jewellery => jewellery._id !== id));
+        } catch (error) {
+            console.error("Error deleting jewellery:", error);
+        }
+    };
+
+    const handleAdd = async (newJewelleryId: string) => {
+        try {
+            const token = sessionStorage.getItem("token");
+
+            if (!token) {
+                toast.error("No token found");
+                return;
+            }
+
+            const response = await fetch(`http://localhost:2704/jewelleries/${newJewelleryId}`, {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+            });
+
+            if (!response.ok) {
+                toast.error(`Failed to fetch the new jewellery. Status: ${response.statusText}`);
+                return;
+            }
+
+            const newJewellery = await response.json();
+
+            setJewelleries([...jewelleries, newJewellery]);
+        } catch (error) {
+            console.error("Error adding jewellery:", error);
+        }
+    };
+
     return (
         <div>
             <h1>Your Jewelleries</h1>
@@ -68,10 +110,10 @@ const JewelleryGrid = () => {
                 {jewelleries && jewelleries.map(jewellery => (
                     <JewelleryMiniCard key={jewellery._id} jewellery={jewellery} onOpenPopup={handleOpenPopup} />
                 ))}
-                <AddNewJewelleryCard />
+                <AddNewJewelleryCard onAdd={handleAdd} />
             </div>
             {selectedJewellery && (
-                <JewelleryPopupCard jewellery={selectedJewellery} onClosePopup={handleClosePopup} />
+                <JewelleryPopupCard jewellery={selectedJewellery} onClosePopup={handleClosePopup} onDelete={handleDelete} />
             )}
         </div>
     );

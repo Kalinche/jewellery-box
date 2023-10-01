@@ -1,0 +1,68 @@
+[
+  {
+    "_id": {
+      "$oid": "612817f91efc262e42d32664"
+    },
+    "price": 1200.5,
+    "visibility": true,
+    "craftingTime": 120,
+    "count": 3,
+    "photoUrls": [
+      "https://www.victoria-gold.com/image/cache/catalog/zlatoGA/GA096/zlatna%20grivna%20victoria%20gold-450x450.jpg"
+    ],
+    "collection": "Лятна Колекция 2023",
+    "type": "bracelet",
+    "tags": [
+      "злато",
+      "ручна изработка",
+      "модерен"
+    ],
+    "style": "модерен",
+    "gender": "women",
+    "description": "Ръчно изработена гривна от 14 каратово злато с инкрустирани диаманти."
+  },
+  {
+    "_id": {
+      "$oid": "612817f91efc262e42d32665"
+    },
+    "price": 3200,
+    "visibility": true,
+    "craftingTime": 200,
+    "count": 1,
+    "photoUrls": [
+      "https://bj-diamonds.com/wp-content/uploads/2021/06/R04W30-R02WW1-small.jpg"
+    ],
+    "collection": "Сватбена Колекция 2023",
+    "type": "ring",
+    "tags": [
+      "бяло злато",
+      "диамант",
+      "класически"
+    ],
+    "style": "класически",
+    "gender": "women",
+    "description": "Сватбен пръстен от бяло злато с голям централен диамант."
+  },
+  {
+    "_id": {
+      "$oid": "612817f91efc262e42d32666"
+    },
+    "price": 1500.75,
+    "visibility": false,
+    "craftingTime": 100,
+    "count": 4,
+    "photoUrls": [
+      "https://s8.badu.bg/photos/583714/800x800_63e0f84c111a2.jpg"
+    ],
+    "collection": "Есенна Колекция 2023",
+    "type": "earrings",
+    "tags": [
+      "сребро",
+      "модерен",
+      "цветни камъни"
+    ],
+    "style": "винтидж",
+    "gender": "unisex",
+    "description": "Сребърни обеци с цветни камъни във винтидж стил."
+  }
+]
