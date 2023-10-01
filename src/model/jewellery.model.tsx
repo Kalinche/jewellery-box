@@ -37,6 +37,7 @@ class Jewellery {
     gender: Gender;          // пол (жена, мъж, унисекс)
     description: string;     // дълго описание
     serialNumber: number;
+    material: string;
 
     constructor(params: {
         jewellerId: ObjectId;
@@ -54,6 +55,7 @@ class Jewellery {
         gender: Gender;
         description: string;
         serialNumber: number;
+        material: string;
     }) {
         this.jewellerId = params.jewellerId
         this.name = params.name
@@ -69,7 +71,8 @@ class Jewellery {
         this.style = params.style;
         this.gender = params.gender;
         this.description = params.description;
-        this.serialNumber = params.serialNumber
+        this.serialNumber = params.serialNumber;
+        this.material = params.material;
     }
 }
 
@@ -93,6 +96,7 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
         gender: Gender,
         description: string,
         serialNumber: number,
+        material: string
     ) {
         super({
             jewellerId,
@@ -109,7 +113,8 @@ class IdentifiableJewellery extends Jewellery implements Identifiable {
             style,
             gender,
             description,
-            serialNumber
+            serialNumber,
+            material
         });
         this._id = _id;
     }

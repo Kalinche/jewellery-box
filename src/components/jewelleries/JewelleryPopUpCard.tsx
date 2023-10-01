@@ -3,8 +3,9 @@ import JewelleryCard from './JewelleryCard';
 import '../styles/PopUp.css';
 import { useEffect, useRef } from 'react';
 import DeleteJewelleryButton from './DeleteJewelleryButton';
+import EditJewelleryButton from './EditJewelleryButton';
 
-const JewelleryPopupCard = ({ jewellery, onClosePopup, onDelete }: { jewellery: IdentifiableJewellery, onClosePopup: () => void, onDelete: (id: string) => void }) => {
+const JewelleryPopupCard = ({ jewellery, onClosePopup, onDelete, onEdit }: { jewellery: IdentifiableJewellery, onClosePopup: () => void, onDelete: (id: string) => void, onEdit: (jewellery: IdentifiableJewellery) => void }) => {
     const popupRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -27,7 +28,7 @@ const JewelleryPopupCard = ({ jewellery, onClosePopup, onDelete }: { jewellery: 
                 <div className="popup-buttons">
                     <button onClick={onClosePopup}>Close</button>
                     <DeleteJewelleryButton jewelleryId={jewellery._id} onClosePopup={onClosePopup} onDelete={onDelete} />
-                    {/* <button onClick={editJewellery}>Edit</button> */}
+                    <EditJewelleryButton jewellery={jewellery} onClosePopup={onClosePopup} onEdit={onEdit} />
                 </div>
             </div>
         </div>

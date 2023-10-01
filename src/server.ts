@@ -41,7 +41,7 @@ app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
     return res.status(err.status).json({ message: err.message });
   } else {
     const message = process.env.NODE_ENV === 'production' ? 'Internal Server Error' : err.message;
-    return res.status(500).json({ message: message });
+    return res.status(500).json({ message: err.message });
   }
 });
 

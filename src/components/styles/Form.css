@@ -150,8 +150,8 @@ form input[type="submit"]:disabled {
   gap: 20px;
 }
 
-.photo-url-item button {
-  margin-left: auto;
-  width: 25%;
+.photo-url-item .remove-url-button {
+  flex: 0 0;
+  width: 100px;
   margin: 0px;
 }

@@ -32,7 +32,6 @@ export class JewelleryRepository {
         return result.insertedId;
     }
 
-
     async getAllJewelleries(): Promise<IdentifiableJewellery[]> {
         const jewelleries = await db.collection(collection).find<IdentifiableJewellery>({}).toArray();
         return jewelleries;
@@ -63,9 +62,16 @@ export class JewelleryRepository {
     }
 
     async updateJewellery(jewellery: IdentifiableJewellery) {
-        const result = await db.collection(collection).replaceOne({ _id: new ObjectId(jewellery._id) }, jewellery);
-        return result;
+        const { _id, ...jewelleryWithoutId } = jewellery;
+        try {
+            const result = await db.collection(collection).replaceOne({ _id: new ObjectId(_id) }, jewelleryWithoutId);
+            return result;
+        } catch (error) {
+            console.error('Error updating jewellery:', error);
+            throw error;
+        }
     }
+
 
 }
 

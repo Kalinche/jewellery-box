@@ -47,7 +47,6 @@ jewelleryRouter.get("/:id", verifyToken, async (req: Request, res, next) => {
 });
 
 jewelleryRouter.post("/", verifyToken, async (req: Request, res, next) => {
-    console.log("Adding jewellery...")
     if (req.userId) {
         const userIdObjectId = new ObjectId(req.userId);
         const newJewellery = req.body;
@@ -56,11 +55,32 @@ jewelleryRouter.post("/", verifyToken, async (req: Request, res, next) => {
             const created = await (<JewelleryRepository>req.app.locals.jewelleryRepo).addJewellery(newJewellery, userIdObjectId);
             res.status(201).location(`/${created.id}`).json(created);
         } catch (err) {
-            console.log("err: " + err)
             next(err);
         }
     } else {
         next(new AppError(401, "You should be logged in to add jewellery!"))
+    }
+});
+
+jewelleryRouter.put("/:id", verifyToken, async (req: Request, res, next) => {
+    try {
+        const id = req.params.id;
+        await indicative.validator.validate(
+            { id },
+            {
+                id: "required|regex:^[0-9a-fA-F]{24}$",
+            }
+        );
+
+        const updatedJewellery = req.body;
+
+        const updated = await (<JewelleryRepository>req.app.locals.jewelleryRepo).updateJewellery(
+            updatedJewellery
+        );
+
+        res.json(updated);
+    } catch (err) {
+        next(err);
     }
 });
 

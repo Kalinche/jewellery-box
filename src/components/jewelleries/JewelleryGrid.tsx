@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { IdentifiableJewellery } from '../../model/jewellery.model';
 import { toast } from 'react-toastify';
 import JewelleryMiniCard from './JewelleryMiniCard';
-import AddNewJewelleryCard from './AddJewelleryCard';
 import JewelleryPopupCard from './JewelleryPopUpCard';
 import '../styles/Grid.css'
+import AddJewelleryMiniCard from './AddJewelleryMiniCard';
 
 const JewelleryGrid = () => {
     const [selectedJewellery, setSelectedJewellery] = useState<IdentifiableJewellery | null>(null);
@@ -112,6 +112,23 @@ const JewelleryGrid = () => {
         }
     };
 
+    const handleEdit = (editedJewellery: IdentifiableJewellery) => {
+        try {
+            const indexToUpdate = jewelleries.findIndex(jewellery => jewellery._id === editedJewellery._id);
+
+            if (indexToUpdate !== -1) {
+                const updatedJewelleries = [...jewelleries];
+                updatedJewelleries[indexToUpdate] = editedJewellery;
+                setJewelleries(updatedJewelleries);
+            } else {
+                console.error("Could not find jewellery item with the specified ID");
+            }
+        } catch (error) {
+            toast.error("Error editing jewellery:" + error);
+        }
+    };
+
+
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
     };
@@ -120,16 +137,16 @@ const JewelleryGrid = () => {
         <div>
             <h1>Your Jewelleries</h1>
             <div className="search-bar">
-                <input type="text" placeholder="Search by name, serial number or tag..." onChange={(e) => setSearchTerm(e.target.value)} />
+                <input type="text" placeholder="Search by name, serial number or tag..." onChange={handleSearchChange} />
             </div>
             <div className="grid">
                 {jewelleries && jewelleries.map(jewellery => (
                     <JewelleryMiniCard key={jewellery._id} jewellery={jewellery} onOpenPopup={handleOpenPopup} />
                 ))}
-                <AddNewJewelleryCard onAdd={handleAdd} />
+                <AddJewelleryMiniCard onAdd={handleAdd} />
             </div>
             {selectedJewellery && (
-                <JewelleryPopupCard jewellery={selectedJewellery} onClosePopup={handleClosePopup} onDelete={handleDelete} />
+                <JewelleryPopupCard jewellery={selectedJewellery} onClosePopup={handleClosePopup} onDelete={handleDelete} onEdit={handleEdit} />
             )}
         </div>
     );

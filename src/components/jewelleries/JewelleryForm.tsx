@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Form.css";
-import { useNavigate } from 'react-router-dom';
 import { Currency, IdentifiableJewellery, JewelleryDTO, JewelleryType, validateRequiredFields } from "../../model/jewellery.model";
 import { toast } from 'react-toastify';
 
-const AddJewellery = ({ onCloseForm, onAdd }: { onCloseForm: () => void, onAdd: (newJewelleryId: string) => void }) => {
-    const initialJewelleryState = new JewelleryDTO({
+type JewelleryFormType = JewelleryDTO | IdentifiableJewellery;
+
+interface JewelleryFormProps {
+    initialJewellery?: JewelleryFormType;
+    onAdd?: (jewellery: JewelleryDTO) => Promise<void>;
+    onEdit?: (jewellery: IdentifiableJewellery) => Promise<void>;
+    onCloseForm: () => void;
+    submitButtonText: string;
+}
+
+const JewelleryForm: React.FC<JewelleryFormProps> = ({ initialJewellery, onAdd, onEdit, onCloseForm, submitButtonText }) => {
+    const emptyJewellery = new JewelleryDTO({
         name: "",
         type: JewelleryType.BRACELET,
         collection: "",
@@ -16,11 +25,16 @@ const AddJewellery = ({ onCloseForm, onAdd }: { onCloseForm: () => void, onAdd: 
         photoUrls: []
     });
 
-    const [jewellery, setJewellery] = useState<JewelleryDTO>(initialJewelleryState);
+    const [jewellery, setJewellery] = useState<JewelleryFormType>(initialJewellery || emptyJewellery);
     const [errors, setErrors] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+    const [photoUrls, setPhotoUrls] = useState<string[]>(initialJewellery?.photoUrls || []);
     const [newPhotoUrl, setNewPhotoUrl] = useState('');
+
+    useEffect(() => {
+        setJewellery(initialJewellery || emptyJewellery);
+        setPhotoUrls(initialJewellery?.photoUrls || []);
+    }, [initialJewellery]);
 
     const handleAddPhotoUrl = () => {
         setPhotoUrls([...photoUrls, newPhotoUrl]);
@@ -38,71 +52,38 @@ const AddJewellery = ({ onCloseForm, onAdd }: { onCloseForm: () => void, onAdd: 
         setJewellery((prevJewellery: JewelleryDTO) => ({ ...prevJewellery, [name]: value }));
         setErrors([]);
     };
-
-    const handleAdd = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         jewellery.photoUrls = photoUrls;
 
         setIsSubmitting(true);
 
-        const validationErrors = validateForm();
+        const validationErrors = validateRequiredFields(jewellery);
         if (validationErrors.length > 0) {
             setErrors(validationErrors);
             setIsSubmitting(false);
             return;
         }
 
-        const token = sessionStorage.getItem("token");
-
-        if (!token) {
-            setErrors(errors => [...errors, "No token found"]);
-            setIsSubmitting(false);
-            return;
-        }
-
         try {
-            const response = await fetch("http://localhost:2704/jewelleries/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': 'Bearer ' + token
-                },
-                body: JSON.stringify(jewellery),
-            });
-
-            if (!response.ok) {
-
-                toast.error(`Failed to add the jewellery. Please try again later. Status: ${response.statusText}`);
-                setIsSubmitting(false);
-                setTimeout(() => {
-                    setIsSubmitting(false);
-                }, 2000);
-
-            } else {
-
-                const addedJewellery = await response.json();
-                console.log(addedJewellery);
-                toast.success("Jewellery added successfully!");
-
-                onAdd(addedJewellery);
-                onCloseForm();
+            if ('_id' in jewellery && onEdit) {
+                await onEdit(jewellery as IdentifiableJewellery);
+            } else if (onAdd) {
+                await onAdd(jewellery as JewelleryDTO);
             }
+            toast.success("Jewellery operation successful!");
+            onCloseForm();
         } catch (error) {
-            throw new Error("Error:" + error);
+            toast.error(`Jewellery operation failed: ${error}`);
+        } finally {
+            setIsSubmitting(false);
         }
     };
-
-    const validateForm: () => string[] = () => {
-        const requiredFieldsErrors = validateRequiredFields(jewellery);
-
-        return requiredFieldsErrors;
-    }
 
     return (
         <div className="form-container">
             <h2 className="form-heading">Add New Jewellery</h2>
-            <form className="large-form" onSubmit={handleAdd}>
+            <form className="large-form" onSubmit={handleSubmit}>
                 <div className="first-column">
                     <label htmlFor="name">Name:</label>
                     <input
@@ -127,7 +108,6 @@ const AddJewellery = ({ onCloseForm, onAdd }: { onCloseForm: () => void, onAdd: 
                             </option>
                         ))}
                     </select>
-
 
                     <label htmlFor="collection">Collection:</label>
                     <input
@@ -166,7 +146,7 @@ const AddJewellery = ({ onCloseForm, onAdd }: { onCloseForm: () => void, onAdd: 
                                 <a href={url} target="_blank" rel="noopener noreferrer">
                                     {url.length > 30 ? `${url.substring(0, 30)}...` : url}
                                 </a>
-                                <button type="button" onClick={() => handleRemovePhotoUrl(index)}>Remove</button>
+                                <button className="remove-url-button" type="button" onClick={() => handleRemovePhotoUrl(index)}>Remove</button>
                             </li>
                         ))}
                     </ul>
@@ -206,12 +186,12 @@ const AddJewellery = ({ onCloseForm, onAdd }: { onCloseForm: () => void, onAdd: 
                     {errors.map((error, index) => (
                         <p key={index} className="error-message">{error}</p>
                     ))}
-                    <input type="submit" value="Add Jewellery" disabled={isSubmitting} />
+                    <input type="submit" value={submitButtonText} disabled={isSubmitting} />
                     <button onClick={onCloseForm}>Cancel</button>
                 </div>
             </form>
-        </div >
+        </div>
     );
 };
 
-export default AddJewellery;
+export default JewelleryForm;
