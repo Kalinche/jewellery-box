@@ -44,6 +44,7 @@ const JewelleryCard = ({ jewellery }: { jewellery: IdentifiableJewellery }) => {
                                 {jewellery.style && <li className="card-list-item">Style: {jewellery.style}</li>}
                                 {jewellery.gender && <li className="card-list-item">Gender: {jewellery.gender}</li>}
                                 {jewellery.craftingTime && <li className="card-list-item">Crafting Time: {jewellery.craftingTime} mins</li>}
+                                {jewellery.price && <li className="card-list-item">Price: {jewellery.price} {jewellery.currency}</li>}
                             </ul>
                         </div>
                     </div>

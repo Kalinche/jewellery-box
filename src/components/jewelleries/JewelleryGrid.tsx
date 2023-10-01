@@ -11,13 +11,14 @@ const JewelleryGrid = () => {
     const [jewelleries, setJewelleries] = useState<IdentifiableJewellery[]>([]);
     const [loading, setLoading] = useState<Boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const token = sessionStorage.getItem("token");
 
         if (!token) {
-            setError("No token found");
-            window.location.replace("/");
+            toast("No token found");
+            setTimeout(() => window.location.replace("/"), 20);
             return;
         }
 
@@ -35,13 +36,21 @@ const JewelleryGrid = () => {
                     throw Error('Network response was not ok: ' + response.status)
                 }
 
-                const data = await response.json();
-                setJewelleries(data);
+                const data: IdentifiableJewellery[] = await response.json();
+
+                const filteredData = data.filter((jewellery: IdentifiableJewellery) => {
+                    const name = jewellery.name || '';
+                    const serialNumber = jewellery.serialNumber.toString(); // assuming serialNumber is a number
+                    return name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        serialNumber.includes(searchTerm);
+                });
+
+                setJewelleries(filteredData);
             } catch (error) {
                 if (error instanceof Error) {
-                    setError(error.message);
+                    toast.error(error.message);
                 } else {
-                    setError("An unexpected error occurred.");
+                    toast.error("An unexpected error occurred.");
                 }
             } finally {
                 if (error != null) {
@@ -53,7 +62,7 @@ const JewelleryGrid = () => {
         };
 
         fetchData();
-    }, []);
+    }, [searchTerm]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -103,9 +112,16 @@ const JewelleryGrid = () => {
         }
     };
 
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
+
     return (
         <div>
             <h1>Your Jewelleries</h1>
+            <div className="search-bar">
+                <input type="text" placeholder="Search by name, serial number or tag..." onChange={(e) => setSearchTerm(e.target.value)} />
+            </div>
             <div className="grid">
                 {jewelleries && jewelleries.map(jewellery => (
                     <JewelleryMiniCard key={jewellery._id} jewellery={jewellery} onOpenPopup={handleOpenPopup} />
