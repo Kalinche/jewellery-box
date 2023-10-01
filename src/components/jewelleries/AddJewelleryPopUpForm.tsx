@@ -163,7 +163,9 @@ const AddJewellery = ({ onCloseForm, onAdd }: { onCloseForm: () => void, onAdd: 
                     <ul className="photo-url-list">
                         {photoUrls.map((url, index) => (
                             <li key={index} className="photo-url-item">
-                                {url.length > 40 ? `${url.substring(0, 40)}...` : url}
+                                <a href={url} target="_blank" rel="noopener noreferrer">
+                                    {url.length > 30 ? `${url.substring(0, 30)}...` : url}
+                                </a>
                                 <button type="button" onClick={() => handleRemovePhotoUrl(index)}>Remove</button>
                             </li>
                         ))}
